@@ -1,0 +1,28 @@
+RewriteEngine On
+
+# ── API routing ───────────────────────────────────────────────────────────────
+
+# GET /api/projects/123  or  PUT /api/projects/123
+RewriteRule ^api/projects/([0-9]+)/?$   api/projects.php?id=$1  [L,QSA]
+
+# GET /api/projects  or  POST /api/projects
+RewriteRule ^api/projects/?$            api/projects.php        [L,QSA]
+
+# GET /api/details/123  or  PUT /api/details/123
+RewriteRule ^api/details/([0-9]+)/?$    api/details.php?id=$1   [L,QSA]
+
+# GET /api/statuses
+RewriteRule ^api/statuses/?$            api/statuses.php        [L,QSA]
+
+# POST /api/auth/login  and  POST /api/auth/logout
+RewriteRule ^api/auth/([a-z]+)/?$       api/auth.php?action=$1  [L,QSA]
+
+# GET /api/health
+RewriteRule ^api/health/?$              api/health.php          [L,QSA]
+
+# ── SPA fallback ──────────────────────────────────────────────────────────────
+# For any request that is not a real file or directory, serve index.php
+# (login.html is a real file, so it is served directly — no redirect loop)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$                      index.php               [L]
