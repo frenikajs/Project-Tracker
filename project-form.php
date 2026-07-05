@@ -22,6 +22,7 @@ requireAuthRedirect();
   </header>
 
   <main class="main-content">
+    <div class="form-layout" id="formLayout">
     <div class="form-container">
       <form id="projectForm" novalidate>
 
@@ -51,6 +52,31 @@ requireAuthRedirect();
         </div>
 
         <div class="form-group">
+          <label for="releaseDate" class="form-label">Release Date</label>
+          <input
+            type="date"
+            id="releaseDate"
+            class="form-input"
+            autocomplete="off"
+          >
+          <div id="releaseHistory" class="release-history" style="display: none;"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <div class="segmented" id="productTypeToggle">
+            <label class="segmented-option">
+              <input type="radio" name="productType" value="Online Sequence" checked>
+              <span>Online Sequence</span>
+            </label>
+            <label class="segmented-option">
+              <input type="radio" name="productType" value="Online Puzzle">
+              <span>Online Puzzle</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label for="blurb" class="form-label">Blurb</label>
           <textarea
             id="blurb"
@@ -62,15 +88,39 @@ requireAuthRedirect();
         </div>
 
         <div class="form-group">
-          <label for="accessCode" class="form-label">Access Code</label>
+          <label for="accessCode" class="form-label" id="accessCodeLabel">Access Code</label>
           <input
             type="text"
             id="accessCode"
             class="form-input"
             placeholder="Access code"
-            maxlength="10"
+            maxlength="20"
             autocomplete="off"
           >
+        </div>
+
+        <div class="form-group">
+          <label for="theme" class="form-label">Theme</label>
+          <div class="input-with-btn">
+            <select id="theme" class="form-input form-select">
+              <option value="">— None —</option>
+            </select>
+            <button type="button" class="btn btn-secondary btn-browse" id="addThemeBtn">+ New</button>
+          </div>
+          <div id="newThemeArea" class="new-option-area" style="display:none;">
+            <input
+              type="text"
+              id="newThemeInput"
+              class="form-input"
+              placeholder="New theme name"
+              maxlength="250"
+              autocomplete="off"
+            >
+            <div class="new-option-actions">
+              <button type="button" class="btn btn-primary" id="saveThemeBtn">Save</button>
+              <button type="button" class="btn btn-secondary" id="cancelThemeBtn">Cancel</button>
+            </div>
+          </div>
         </div>
 
         <!-- ── Project Details ── -->
@@ -103,14 +153,18 @@ requireAuthRedirect();
 
           <div class="form-group">
             <label for="mockUps" class="form-label">Mock-Ups</label>
-            <input
-              type="text"
-              id="mockUps"
-              class="form-input"
-              placeholder="Mock-ups link or notes"
-              maxlength="250"
-              autocomplete="off"
-            >
+            <div class="input-with-btn">
+              <input
+                type="text"
+                id="mockUps"
+                class="form-input"
+                placeholder="Mock-ups link or path"
+                maxlength="500"
+                autocomplete="off"
+              >
+              <button type="button" class="btn btn-secondary btn-browse" id="mockUpsBrowseBtn">Browse…</button>
+              <input type="file" id="mockUpsFilePicker" webkitdirectory style="display:none">
+            </div>
           </div>
 
           <div class="form-group">
@@ -120,6 +174,18 @@ requireAuthRedirect();
               id="listing"
               class="form-input"
               placeholder="Listing link or notes"
+              maxlength="250"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="sequenceLink" class="form-label" id="sequenceLinkLabel">Sequence Link</label>
+            <input
+              type="text"
+              id="sequenceLink"
+              class="form-input"
+              placeholder="Sequence link or notes"
               maxlength="250"
               autocomplete="off"
             >
@@ -141,6 +207,10 @@ requireAuthRedirect();
             <label class="checkbox-label">
               <input type="checkbox" id="email" class="checkbox-input">
               <span class="checkbox-text">Email</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="socialMedia" class="checkbox-input">
+              <span class="checkbox-text">Social Media</span>
             </label>
           </div>
         </div>
@@ -169,10 +239,35 @@ requireAuthRedirect();
 
       </form>
     </div>
+
+    <div class="todos-panel" id="todosPanel" style="display: none;">
+      <div class="todos-panel-inner">
+        <h3 class="todos-panel-title">To Dos</h3>
+
+        <div id="todosLoading" class="loading-state" style="padding: 32px 0;">
+          <div class="spinner"></div>
+          <p>Loading to-dos...</p>
+        </div>
+
+        <div id="todosContent" style="display: none;">
+          <div id="pendingSection">
+            <h4 class="todos-group-title">Pending</h4>
+            <div id="pendingList" class="todos-list"></div>
+            <p class="todos-empty" id="pendingEmpty" style="display: none;">All done!</p>
+          </div>
+
+          <div id="completedSection" style="display: none;">
+            <h4 class="todos-group-title todos-group-completed">Completed</h4>
+            <div id="completedList" class="todos-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
   </main>
 
   <div class="toast" id="toast"></div>
 
-  <script src="js/project-form.js"></script>
+  <script src="js/project-form.js?v=<?= filemtime(__DIR__ . '/js/project-form.js') ?>"></script>
 </body>
 </html>

@@ -16,6 +16,7 @@ requireAuthRedirect();
     <div class="header-content">
       <h1 class="app-title">Project Tracker</h1>
       <div class="header-actions">
+        <button class="btn btn-ghost" onclick="window.location.href='diagnostics.php'">Diagnostics</button>
         <button class="btn btn-primary" onclick="window.location.href='project-form.php'">+ New Project</button>
         <button class="btn btn-ghost" id="logoutBtn">Sign Out</button>
       </div>
@@ -33,7 +34,9 @@ requireAuthRedirect();
           placeholder="Search by project name..."
           autocomplete="off"
         >
-        <button class="btn btn-primary" id="searchBtn">Search</button>
+        <select id="themeFilter" class="form-input form-select search-filter">
+          <option value="">All Themes</option>
+        </select>
         <button class="btn btn-secondary" id="clearBtn">Clear</button>
       </div>
     </section>
@@ -61,6 +64,8 @@ requireAuthRedirect();
             <tr>
               <th>Project Name</th>
               <th>Status</th>
+              <th>Theme</th>
+              <th>Release Date</th>
               <th>Date Created</th>
               <th>Last Updated</th>
             </tr>
@@ -112,12 +117,20 @@ requireAuthRedirect();
               <span class="summary-label">Status</span>
               <span class="summary-value" id="summaryStatus"></span>
             </div>
+            <div class="summary-row" id="summaryThemeRow">
+              <span class="summary-label">Theme</span>
+              <span class="summary-value" id="summaryTheme"></span>
+            </div>
+            <div class="summary-row" id="summaryTypeRow">
+              <span class="summary-label">Type</span>
+              <span class="summary-value" id="summaryType"></span>
+            </div>
             <div class="summary-row" id="summaryBlurbRow" style="display: none;">
               <span class="summary-label">Blurb</span>
               <span class="summary-value summary-blurb" id="summaryBlurb"></span>
             </div>
             <div class="summary-row summary-row-last" id="summaryAccessCodeRow" style="display: none;">
-              <span class="summary-label">Access Code</span>
+              <span class="summary-label" id="summaryAccessCodeLabel">Access Code</span>
               <span class="summary-value" id="summaryAccessCode"></span>
             </div>
           </div>
@@ -144,6 +157,10 @@ requireAuthRedirect();
                 <span class="summary-label">Listing</span>
                 <span class="summary-value" id="summaryListing"></span>
               </div>
+              <div class="summary-row">
+                <span class="summary-label" id="summarySequenceLinkLabel">Sequence Link</span>
+                <span class="summary-value" id="summarySequenceLink"></span>
+              </div>
               <div class="summary-bool-grid">
                 <div class="summary-bool-item">
                   <span class="summary-label">Pinterest</span>
@@ -161,12 +178,28 @@ requireAuthRedirect();
                   <span class="summary-label">Email</span>
                   <span class="summary-value" id="summaryEmail"></span>
                 </div>
+                <div class="summary-bool-item">
+                  <span class="summary-label">Social Media</span>
+                  <span class="summary-value" id="summarySocialMedia"></span>
+                </div>
               </div>
             </div>
           </div>
 
+          <div class="summary-section-title" id="summaryTodosTitle" style="display: none;">To Dos</div>
+          <div class="summary-todo-list" id="summaryTodosArea" style="display: none;">
+            <div class="summary-loading" id="summaryTodosLoading">
+              <div class="spinner spinner-sm"></div> Loading to-dos...
+            </div>
+            <div id="summaryTodosContent"></div>
+          </div>
+
           <div class="summary-section-title">Dates</div>
           <div class="summary-fields">
+            <div class="summary-row">
+              <span class="summary-label">Release Date</span>
+              <span class="summary-value" id="summaryReleaseDate"></span>
+            </div>
             <div class="summary-row">
               <span class="summary-label">Created</span>
               <span class="summary-value" id="summaryCreated"></span>
@@ -176,6 +209,9 @@ requireAuthRedirect();
               <span class="summary-value" id="summaryUpdated"></span>
             </div>
           </div>
+
+          <div class="summary-section-title" id="summaryReleaseHistoryTitle" style="display: none;">Release Date History</div>
+          <div class="summary-fields" id="summaryReleaseHistoryArea" style="display: none;"></div>
 
         </div>
         <div class="modal-footer">
@@ -189,6 +225,6 @@ requireAuthRedirect();
 
   <div class="toast" id="toast"></div>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=<?= filemtime(__DIR__ . '/js/main.js') ?>"></script>
 </body>
 </html>
